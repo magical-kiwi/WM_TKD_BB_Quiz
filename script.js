@@ -34,29 +34,29 @@ let currentQuiz = 0;
 let score = 0;
 
 function loadQuiz() {
-    const currentQuestion = quizData[currentQuiz];
-    quiz.innerHTML = `
-        <div class="question">${currentQuestion.question}</div>
-        <label><input type="radio" name="answer" value="a"> ${currentQuestion.a}</label><br>
-        <label><input type="radio" name="answer" value="b"> ${currentQuestion.b}</label><br>
-        <label><input type="radio" name="answer" value="c"> ${currentQuestion.c}</label>
-    `;
+    quiz.innerHTML = '';
+    quizData.forEach((currentQuestion, index) => {
+        quiz.innerHTML += `
+            <div class="question">
+                Question ${index + 1}: ${currentQuestion.question}
+                <label class="answer-options"><input type="radio" name="answer${index}" value="a"> ${currentQuestion.a}</label>
+                <label class="answer-options"><input type="radio" name="answer${index}" value="b"> ${currentQuestion.b}</label>
+                <label class="answer-options"><input type="radio" name="answer${index}" value="c"> ${currentQuestion.c}</label>
+            </div>
+        `;
+    });
 }
 
 loadQuiz();
 
 submitButton.addEventListener('click', () => {
-    const answer = document.querySelector('input[name="answer"]:checked');
-    if (answer && answer.value === quizData[currentQuiz].correct) {
-        score++;
-    }
-
-    currentQuiz++;
-
-    if (currentQuiz < quizData.length) {
-        loadQuiz();
-    } else {
-        results.innerHTML = `You scored ${score} out of ${quizData.length}`;
-        submitButton.disabled = true;
-    }
+    let score = 0;
+    quizData.forEach((currentQuestion, index) => {
+        const answer = document.querySelector(`input[name="answer${index}"]:checked`);
+        if (answer && answer.value === currentQuestion.correct) {
+            score++;
+        }
+    });
+    results.innerHTML = `You scored ${score} out of ${quizData.length}`;
+    submitButton.disabled = true;
 });
