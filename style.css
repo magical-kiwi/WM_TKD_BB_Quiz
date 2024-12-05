@@ -31,10 +31,5 @@ button:hover {
 }
 
 .question {
-    margin-bottom: 10px;
-}
-
-.answer-options {
-    display: inline;
-    margin-right: 15px;
+    margin-bottom: 20px;
 }
