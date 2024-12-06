@@ -2,10 +2,10 @@ const quizData = [
     { question: "Tang Soo Do",                  a:"The art we study",     b:"Grandmaster",                   c:"Association flag",        correct:"a"}, // 1
     { question: "Kwan Chang Nim",               a:"Grandmaster",          b:"National flag",                 c:"Attention",               correct:"a"}, // 2
     { question: "Sah Bum Nim",                  a:"Bow to instructor",    b:"Association flag",              c:"Instructor or teacher",   correct:"c"}, // 3
-    { question: "Dan",                          a:"Black belt",           b:"Return",                        c:"Turn",                    correct:"a"}, // 4
-    { question: "Gup",                          a:"Grandmaster",          b:"Black belt",                    c:"Colour belt",             correct:"c"}, // 5
     { question: "Dojang",                       a:"Salute to flag",       b:"Training hall or studio",       c:"Testing (Gup and Dan)",   correct:"b"}, // 6
     { question: "Do Bohk",                      a:"Belt",                 b:"Uniform/Suit",                  c:"Sit",                     correct:"b"}, // 7
+    { question: "Ha-dan Mahk ki",               a:"Low Block",            b:"High block",                    c:"Low Punch",               correct:"a"}, // 4
+    { question: "Gup",                          a:"Grandmaster",          b:"Black belt",                    c:"Colour belt",             correct:"c"}, // 5
     { question: "Dee",                          a:"Uniform/suit",         b:"Belt",                          c:"Training hall or studio", correct:"b"}, // 8
     { question: "Sun Bae",                      a:"Senior member",        b:"Instructor",                    c:"Uniform/suit",            correct:"a"}, // 9
     { question: "Sae Kye Tang Soo Do Hyup Hoi", a:"Association flag",     b:"World Tang Soo Do Association", c:"National flag",           correct:"b"}, // 10
@@ -26,6 +26,7 @@ const quizData = [
     { question: "Cho Bo Ja",                    a:"Attention",            b:"Beginner",                      c:"Energy",                  correct:"b"}  // 25
 ];
 
+const title = document.getElementById('title');
 const quiz = document.getElementById('quiz');
 const submitButton = document.getElementById('submit');
 const resetButton = document.getElementById('reset');
@@ -69,9 +70,9 @@ submitButton.addEventListener('click', () => {
     let encouragement = ''
     let percentCorrect = score/quizData.length    
     if(percentCorrect >= 1) encouragement = 'Yay, you got full marks. Well done!';
-    else if(percentCorrect >= 0.50) encouragement = 'Half way there, keep practising!';
+    else if(percentCorrect >= 0.90) encouragement = 'So close, just a few more tries!';
     else if(percentCorrect >= 0.75) encouragement = 'Almost there, keep at it!';
-    else if(percentCorrect >= 0.90) encouragement = 'So close, just a few more tries!';   
+    else if(percentCorrect >= 0.50) encouragement = 'Half way there, keep practising!';
     else encouragement = 'Keep practising, you get there in no time!';
     results.innerHTML = `<div><label>You scored ${score} out of ${quizData.length}. ${encouragement}</label></div>`;
     if(incorrectAnswers.length >0){
@@ -86,7 +87,7 @@ submitButton.addEventListener('click', () => {
     resetButton.disabled = false;
 });
 
-
+title.innerHTML = 'White Belt Terminology Quiz'
 resetButton.addEventListener('click', () => { resetQuiz()});
 
 resetQuiz()

@@ -26,6 +26,7 @@ const quizData = [
     { question: "Cho Bo Ja",                    a:"Attention",            b:"Beginner",                      c:"Energy",                  correct:"b"}  // 25
 ];
 
+const title = document.getElementById('title');
 const quiz = document.getElementById('quiz');
 const submitButton = document.getElementById('submit');
 const resetButton = document.getElementById('reset');
@@ -69,9 +70,9 @@ submitButton.addEventListener('click', () => {
     let encouragement = ''
     let percentCorrect = score/quizData.length    
     if(percentCorrect >= 1) encouragement = 'Yay, you got full marks. Well done!';
-    else if(percentCorrect >= 0.50) encouragement = 'Half way there, keep practising!';
+    else if(percentCorrect >= 0.90) encouragement = 'So close, just a few more tries!';
     else if(percentCorrect >= 0.75) encouragement = 'Almost there, keep at it!';
-    else if(percentCorrect >= 0.90) encouragement = 'So close, just a few more tries!';   
+    else if(percentCorrect >= 0.50) encouragement = 'Half way there, keep practising!';
     else encouragement = 'Keep practising, you get there in no time!';
     results.innerHTML = `<div><label>You scored ${score} out of ${quizData.length}. ${encouragement}</label></div>`;
     if(incorrectAnswers.length >0){
@@ -87,6 +88,7 @@ submitButton.addEventListener('click', () => {
 });
 
 
+title.innerHTML = 'Brown Belt Terminology Quiz'
 resetButton.addEventListener('click', () => { resetQuiz()});
 
 resetQuiz()
