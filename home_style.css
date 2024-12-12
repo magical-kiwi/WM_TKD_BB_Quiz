@@ -5,19 +5,27 @@ body {
     margin: 50px;
 }
 
-a {
+button {
     display: block;
-    margin: 20px;
+    font-size: 22px;
     padding: 10px;
     text-decoration: none;
     color: white;
     background-color: #007BFF;
     border-radius: 5px;
-    width: 150px;
+    width: 200px;
     margin-left: auto;
     margin-right: auto;
 }
 
-a:hover {
+button:hover {
     background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: grey;  /* Grey out the button */
+    color: white;           /* Text color */
+    border: 1px solid #ccc; /* Optional: lighter border */
+    cursor: not-allowed;    /* Show a "not allowed" cursor */
+    opacity: 0.7;           /* Slight transparency */
 }
