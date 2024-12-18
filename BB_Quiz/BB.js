@@ -28,11 +28,4 @@ const quizData = [
     { question: "Cho Bo Ja",                    a:"Attention",            b:"Beginner",                      c:"Energy",                  correct:"b"}  // 25
 ];
 
-/*const title = document.getElementById('title');
-const quiz = document.getElementById('quiz');
-const submitButton = document.getElementById('submit');
-const resetButton = document.getElementById('reset');
-resetButton.disabled = true
-const results = document.getElementById('results');*/
-
 let quiz = new Quiz(document,'Brown Belt Terminology Quiz', quizData);
