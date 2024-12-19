@@ -27,21 +27,6 @@ export class Quiz {
         this.resetQuiz();
     }
 
-    resetQuiz() {
-        this.quizElements.submitButton.disabled = false;
-        this.quizElements.results.innerHTML = ''
-        this.quizElements.quiz.innerHTML = '';
-        this.quizData.forEach((currentQuestion, index) => {
-            this.quizElements.quiz.innerHTML += `
-                <div class="question">
-                    <label><strong>Question ${index + 1}: ${currentQuestion.question}</strong></label><br>
-                    <label><input type="radio" name="answer${index}" value="a"> ${currentQuestion.a}</label><br>
-                    <label><input type="radio" name="answer${index}" value="b"> ${currentQuestion.b}</label><br>
-                    <label><input type="radio" name="answer${index}" value="c"> ${currentQuestion.c}</label>
-                </div>
-            `;
-        });
-}
 
     resetQuiz() {
         let quizElements = this.quizElements;
