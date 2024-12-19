@@ -43,6 +43,14 @@ button:disabled {
     margin-bottom: 20px;
 }
 
+.correct {
+    color: green;
+}
+
+.incorrect {
+    color: red;
+}
+
 a {
     display: block;
     margin: 20px;
