@@ -27,21 +27,6 @@ export class Quiz {
         this.resetQuiz();
     }
 
-    resetQuiz() {
-        this.quizElements.submitButton.disabled = false;
-        this.quizElements.results.innerHTML = ''
-        this.quizElements.quiz.innerHTML = '';
-        this.quizData.forEach((currentQuestion, index) => {
-            this.quizElements.quiz.innerHTML += `
-                <div class="question">
-                    <label><strong>Question ${index + 1}: ${currentQuestion.question}</strong></label><br>
-                    <label><input type="radio" name="answer${index}" value="a"> ${currentQuestion.a}</label><br>
-                    <label><input type="radio" name="answer${index}" value="b"> ${currentQuestion.b}</label><br>
-                    <label><input type="radio" name="answer${index}" value="c"> ${currentQuestion.c}</label>
-                </div>
-            `;
-        });
-}
 
     resetQuiz() {
         let quizElements = this.quizElements;
@@ -51,12 +36,14 @@ export class Quiz {
         quizElements.results.innerHTML = ''
         quizElements.quiz.innerHTML = '';
         this.quizData.forEach((currentQuestion, index) => {
+            let questionNumber = index + 1;
             quizElements.quiz.innerHTML += `
                 <div class="question">
-                    <label><strong>Question ${index + 1}: ${currentQuestion.question}</strong></label><br>
-                    <label><input type="radio" name="answer${index}" value="a"> ${currentQuestion.a}</label><br>
-                    <label><input type="radio" name="answer${index}" value="b"> ${currentQuestion.b}</label><br>
-                    <label><input type="radio" name="answer${index}" value="c"> ${currentQuestion.c}</label>
+                    <label id="${questionNumber}_question"><strong>Question ${questionNumber}: ${currentQuestion.question}</strong></label><br>
+                    <label id="${questionNumber}_ans_a"><input type="radio" name="answer${index}" value="a"> ${currentQuestion.a}</label><br>
+                    <label id="${questionNumber}_ans_b"><input type="radio" name="answer${index}" value="b"> ${currentQuestion.b}</label><br>
+                    <label id="${questionNumber}_ans_c"><input type="radio" name="answer${index}" value="c"> ${currentQuestion.c}</label><br>
+                    <label id="${questionNumber}_correction"></label>
                 </div>
             `;
         });
@@ -68,26 +55,38 @@ export class Quiz {
         let score = 0;
         this.quizData.forEach((currentQuestion, index) => {
             const answer = this.quizElements.document.querySelector(`input[name="answer${index}"]:checked`);
-            if (answer) { 
+            let questionNumber = index + 1;
+            let questionText = this.quizElements.document.getElementById(`${questionNumber}_question`);
+            if (answer) {
                 if(answer.value === currentQuestion.correct) {
-                    score++;
+                    score++;                    
+                    questionText.classList.toggle("correct");
                 }
                 else{
-                incorrectAnswers.push(`<strong>Question ${index + 1}:</strong> Your Answer: <u>${currentQuestion[answer.value]}</u>. Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`) 
+                    let incorrectText = `<strong>Question ${index + 1}:</strong> Your Answer: <u>${currentQuestion[answer.value]}</u>. Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`;             
+                    incorrectAnswers.push(incorrectText)
+                    this.quizElements.document.getElementById(`${questionNumber}_correction`).innerHTML = incorrectText;
+                    questionText.classList.toggle("incorrect");
                 }
             }
-            else{
-                incorrectAnswers.push(`<strong>Question ${index + 1}:</strong> Your Answer: <u>None</u>. Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`)
+            else{                
+                let incorrectText = `<strong>Question ${index + 1}:</strong> Your Answer: <u>None</u>. Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`;
+                incorrectAnswers.push(incorrectText)
+                this.quizElements.document.getElementById(`${questionNumber}_correction`).innerHTML = incorrectText;
+                questionText.classList.toggle("incorrect");
             }
         });
-        let encouragement = ''
-        let percentCorrect = score/this.quizData.length;
-        if(percentCorrect >= 1) encouragement = 'Yay, you got full marks. Well done!';
-        else if(percentCorrect >= 0.90) encouragement = 'So close, just a few more tries!';
-        else if(percentCorrect >= 0.75) encouragement = 'Almost there, keep at it!';
-        else if(percentCorrect >= 0.50) encouragement = 'Half way there, keep practising!';
-        else encouragement = 'Keep practising, you get there in no time!';
+        let encouragement = this.#calculateEncouragment(score)
         this.quizElements.results.innerHTML = `<div><label>You scored ${score} out of ${this.quizData.length}. ${encouragement}</label></div>`;
+        
+        this.#printIncorrect(incorrectAnswers)
+        
+        
+        this.quizElements.submitButton.disabled = true;
+        this.quizElements.resetButton.disabled = false;
+    }
+
+    #printIncorrect(incorrectAnswers){        
         if(incorrectAnswers.length >0){
             this.quizElements.results.innerHTML+=`<br><div><label>Incorrect Answers:</label><label>`;
             incorrectAnswers.forEach((incorrectAnswer, index) => {
@@ -95,8 +94,18 @@ export class Quiz {
             });
             this.quizElements.results.innerHTML+='</div>';
         }
-        
-        this.quizElements.submitButton.disabled = true;
-        this.quizElements.resetButton.disabled = false;
     }
+
+    #calculateEncouragment(score){
+        let encouragement = ''
+        let percentCorrect = score/this.quizData.length;
+        if(percentCorrect >= 1) encouragement = 'Yay, you got full marks. Well done!';
+        else if(percentCorrect >= 0.90) encouragement = 'So close, just a few more tries!';
+        else if(percentCorrect >= 0.75) encouragement = 'Almost there, keep at it!';
+        else if(percentCorrect >= 0.50) encouragement = 'Half way there, keep practising!';
+        else encouragement = 'Keep practising, you get there in no time!';
+
+        return encouragement
+    }
+
 }
