@@ -2,6 +2,9 @@ export class Quiz {
     constructor(document, title, questions = []) {
         this.quizData = questions;
         this.quizElements = this.#getQuizElements(document);
+        this.quizElements.backButton.addEventListener('click', () => {
+            this.goBack()
+        });
         this.title = title
         this.#initQuiz();
     }
@@ -13,7 +16,8 @@ export class Quiz {
             quiz: doc.getElementById("quiz"),
             submitButton: doc.getElementById("submit"),
             resetButton: doc.getElementById("reset"),
-            results: doc.getElementById("results"),
+            backButton: doc.getElementById("back"),
+            results: doc.getElementById("results"),            
         };
     }
 
@@ -47,6 +51,10 @@ export class Quiz {
                 </div>
             `;
         });
+    }
+
+    goBack(){
+        window.location.href = "../../index.html"
     }
 
     submitQuiz()
