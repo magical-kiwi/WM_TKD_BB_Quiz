@@ -17,7 +17,8 @@ export class Quiz {
             submitButton: doc.getElementById("submit"),
             resetButton: doc.getElementById("reset"),
             backButton: doc.getElementById("back"),
-            results: doc.getElementById("results"),            
+            results: doc.getElementById("results"),
+            questionBlocks: []
         };
     }
 
@@ -34,22 +35,55 @@ export class Quiz {
 
     resetQuiz() {
         let quizElements = this.quizElements;
-
+        quizElements.questionBlocks = [];
         quizElements.submitButton.disabled = false;
         quizElements.resetButton.disabled = true;
         quizElements.results.innerHTML = ''
         quizElements.quiz.innerHTML = '';
         this.quizData.forEach((currentQuestion, index) => {
-            let questionNumber = index + 1;
-            quizElements.quiz.innerHTML += `
-                <div class="question">
-                    <label id="${questionNumber}_question"><strong>Question ${questionNumber}: ${currentQuestion.question}</strong></label><br>
-                    <label id="${questionNumber}_ans_a"><input type="radio" name="answer${index}" value="a"> ${currentQuestion.a}</label><br>
-                    <label id="${questionNumber}_ans_b"><input type="radio" name="answer${index}" value="b"> ${currentQuestion.b}</label><br>
-                    <label id="${questionNumber}_ans_c"><input type="radio" name="answer${index}" value="c"> ${currentQuestion.c}</label><br>
-                    <label id="${questionNumber}_correction"></label>
-                </div>
-            `;
+            const questionNumber = index + 1;
+        
+            // Create a container for the question
+            const questionContainer = document.createElement("div");
+            questionContainer.className = "question";
+        
+            // Create the question label
+            const questionLabel = document.createElement("label");
+            questionLabel.id = `${questionNumber}_question`;
+            questionLabel.innerHTML = `<strong>Question ${questionNumber}: ${currentQuestion.question}</strong>`;
+            questionContainer.appendChild(questionLabel);
+            questionContainer.appendChild(document.createElement("br"));
+        
+            // Create answer labels and inputs
+            ["a", "b", "c"].forEach((option) => {
+                const answerLabel = document.createElement("label");
+                answerLabel.id = `${questionNumber}_ans_${option}`;
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = `answer${index}`;
+                input.value = option;
+                answerLabel.appendChild(input);
+                answerLabel.appendChild(document.createTextNode(` ${currentQuestion[option]}`));
+                questionContainer.appendChild(answerLabel);
+                questionContainer.appendChild(document.createElement("br"));
+            });
+        
+            // Create correction label
+            const correctionLabel = document.createElement("label");
+            correctionLabel.id = `${questionNumber}_correction`;
+            questionContainer.appendChild(correctionLabel);
+        
+            // Append the question container to the quiz element
+            quizElements.quiz.appendChild(questionContainer);
+        
+            // Add the question and answers to the questionBlocks array
+            quizElements.questionBlocks.push({
+                question: questionLabel,
+                answerA: document.getElementById(`${questionNumber}_ans_a`),
+                answerB: document.getElementById(`${questionNumber}_ans_b`),
+                answerC: document.getElementById(`${questionNumber}_ans_c`),
+                correction: correctionLabel,
+            });
         });
     }
 
@@ -61,38 +95,39 @@ export class Quiz {
     {
         let incorrectAnswers = []
         let score = 0;
+        let quizElements = this.quizElements;
         this.quizData.forEach((currentQuestion, index) => {
-            const answer = this.quizElements.document.querySelector(`input[name="answer${index}"]:checked`);
+            const answer = quizElements.document.querySelector(`input[name="answer${index}"]:checked`);
             let questionNumber = index + 1;
-            let questionText = this.quizElements.document.getElementById(`${questionNumber}_question`);
+            let questionBlocks = quizElements.questionBlocks[index];
+            // If an answer has been selected.
             if (answer) {
                 if(answer.value === currentQuestion.correct) {
                     score++;                    
-                    questionText.classList.toggle("correct");
+                    questionBlocks.question.classList.toggle("correct");
                 }
                 else{
                     let incorrectText = `<strong>Question ${index + 1}:</strong> Your Answer: <u>${currentQuestion[answer.value]}</u>. Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`;             
                     incorrectAnswers.push(incorrectText)
-                    this.quizElements.document.getElementById(`${questionNumber}_correction`).innerHTML = incorrectText;
-                    questionText.classList.toggle("incorrect");
+                    questionBlocks.correction.innerHTML = incorrectText;
+                    questionBlocks.question.classList.toggle("incorrect");
                 }
             }
             // No answer has been selected
             else{                
-                let incorrectText = `<strong>Question ${index + 1}:</strong> You <u>did not answer</u> this question. The Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`;
+                let incorrectText = `<strong>Question ${index + 1}:</strong> You <u>did not answer</u>. The Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`;
                 incorrectAnswers.push(incorrectText)
-                this.quizElements.document.getElementById(`${questionNumber}_correction`).innerHTML = incorrectText;
-                questionText.classList.toggle("incorrect");
+                questionBlocks.correction.innerHTML = incorrectText;
+                questionBlocks.question.classList.toggle("incorrect");
             }
         });
         let encouragement = this.#calculateEncouragment(score)
-        this.quizElements.results.innerHTML = `<div><label>You scored ${score} out of ${this.quizData.length}. ${encouragement}</label></div>`;
+        quizElements.results.innerHTML = `<div><label>You scored ${score} out of ${this.quizData.length}. ${encouragement}</label></div>`;
         
-        this.#printIncorrect(incorrectAnswers)
+        this.#printIncorrect(incorrectAnswers)        
         
-        
-        this.quizElements.submitButton.disabled = true;
-        this.quizElements.resetButton.disabled = false;
+        quizElements.submitButton.disabled = true;
+        quizElements.resetButton.disabled = false;
     }
 
     #printIncorrect(incorrectAnswers){        
