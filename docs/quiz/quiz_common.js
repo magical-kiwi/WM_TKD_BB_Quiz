@@ -122,7 +122,7 @@ export class Quiz {
             }
         });
         let encouragement = this.#calculateEncouragment(score)
-        quizElements.results.innerHTML = `<div><label>You scored ${score} out of ${this.quizData.length}. ${encouragement}</label></div>`;
+        quizElements.results.innerHTML = `<div><p><strong>Score:</strong></label><br><label>You scored ${score} out of ${this.quizData.length}. ${encouragement}</p></div>`;
         
         this.#printIncorrect(incorrectAnswers)        
         
@@ -132,11 +132,11 @@ export class Quiz {
 
     #printIncorrect(incorrectAnswers){        
         if(incorrectAnswers.length >0){
-            this.quizElements.results.innerHTML+=`<br><div><label>Incorrect Answers:</label><label>`;
+            this.quizElements.results.innerHTML+=`<div><p><strong>Incorrect Answers:</strong><br>`;
             incorrectAnswers.forEach((incorrectAnswer, index) => {
-                this.quizElements.results.innerHTML+= `<label>${incorrectAnswer}</label><br>`
+                this.quizElements.results.innerHTML+= `${incorrectAnswer}<br>`
             });
-            this.quizElements.results.innerHTML+='</div>';
+            this.quizElements.results.innerHTML+='</p></div>';
         }
     }
 
