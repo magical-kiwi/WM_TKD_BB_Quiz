@@ -77,8 +77,9 @@ export class Quiz {
                     questionText.classList.toggle("incorrect");
                 }
             }
+            // No answer has been selected
             else{                
-                let incorrectText = `<strong>Question ${index + 1}:</strong> Your Answer: <u>None</u>. Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`;
+                let incorrectText = `<strong>Question ${index + 1}:</strong> You <u>did not answer</u> this question. The Correct answer: <u>${currentQuestion[currentQuestion.correct]}</u>`;
                 incorrectAnswers.push(incorrectText)
                 this.quizElements.document.getElementById(`${questionNumber}_correction`).innerHTML = incorrectText;
                 questionText.classList.toggle("incorrect");
