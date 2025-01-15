@@ -98,7 +98,6 @@ export class Quiz {
         let quizElements = this.quizElements;
         this.quizData.forEach((currentQuestion, index) => {
             const answer = quizElements.document.querySelector(`input[name="answer${index}"]:checked`);
-            let questionNumber = index + 1;
             let questionBlocks = quizElements.questionBlocks[index];
             // If an answer has been selected.
             if (answer) {
@@ -121,16 +120,19 @@ export class Quiz {
                 questionBlocks.question.classList.toggle("incorrect");
             }
         });
-        let encouragement = this.#calculateEncouragment(score)
-        quizElements.results.innerHTML = `<div><p><strong>Score:</strong></label><br><label>You scored ${score} out of ${this.quizData.length}. ${encouragement}</p></div>`;
         
-        this.#printIncorrect(incorrectAnswers)        
+        
+        this.#setResults(score, incorrectAnswers)        
         
         quizElements.submitButton.disabled = true;
         quizElements.resetButton.disabled = false;
     }
 
-    #printIncorrect(incorrectAnswers){        
+    #setResults(score, incorrectAnswers){        
+        let quizElements = this.quizElements;
+        
+        let encouragement = this.#calculateEncouragment(score)        
+        quizElements.results.innerHTML = `<div><p><strong>Score:</strong><br>You scored ${score} out of ${this.quizData.length}. ${encouragement}</p></div>`;
         if(incorrectAnswers.length >0){
             this.quizElements.results.innerHTML+=`<div><p><strong>Incorrect Answers:</strong><br>`;
             incorrectAnswers.forEach((incorrectAnswer, index) => {
