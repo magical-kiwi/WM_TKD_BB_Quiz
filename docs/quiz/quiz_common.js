@@ -128,17 +128,27 @@ export class Quiz {
         quizElements.resetButton.disabled = false;
     }
 
-    #setResults(score, incorrectAnswers){        
+    #setResults(score, incorrectAnswers){  
         let quizElements = this.quizElements;
         
+        quizElements.results.innerHTML = ''
+        //set Score
+        const scoreDiv = document.createElement("div");
         let encouragement = this.#calculateEncouragment(score)        
-        quizElements.results.innerHTML = `<div><p><strong>Score:</strong><br>You scored ${score} out of ${this.quizData.length}. ${encouragement}</p></div>`;
-        if(incorrectAnswers.length >0){
-            this.quizElements.results.innerHTML+=`<div><p><strong>Incorrect Answers:</strong><br>`;
+        scoreDiv.innerHTML = `<p><strong>Score:</strong><br>You scored ${score} out of ${this.quizData.length}. ${encouragement}</p>`;
+        quizElements.results.appendChild(scoreDiv)
+        //Set incorrect answers.
+        if(incorrectAnswers.length > 0){
+            const resultDiv = document.createElement("div");
+            quizElements.results.appendChild(resultDiv)
+            const resultParagraph = document.createElement("p")
+            resultDiv.appendChild(resultParagraph)            
+            let incorrectAnswersHTML = `<strong>Incorrect Answers:</strong><br>`
+            
             incorrectAnswers.forEach((incorrectAnswer, index) => {
-                this.quizElements.results.innerHTML+= `${incorrectAnswer}<br>`
+                incorrectAnswersHTML += `${incorrectAnswer}<br>`
             });
-            this.quizElements.results.innerHTML+='</p></div>';
+            resultParagraph.innerHTML = incorrectAnswersHTML;
         }
     }
 
