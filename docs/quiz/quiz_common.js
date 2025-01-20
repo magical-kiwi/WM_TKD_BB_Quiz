@@ -79,9 +79,9 @@ export class Quiz {
             // Add the question and answers to the questionBlocks array
             quizElements.questionBlocks.push({
                 question: questionLabel,
-                answerA: document.getElementById(`${questionNumber}_ans_a`),
-                answerB: document.getElementById(`${questionNumber}_ans_b`),
-                answerC: document.getElementById(`${questionNumber}_ans_c`),
+                answerA: document.getElementById(`${questionNumber}_ans_a`).querySelector("input"),
+                answerB: document.getElementById(`${questionNumber}_ans_b`).querySelector("input"),
+                answerC: document.getElementById(`${questionNumber}_ans_c`).querySelector("input"),
                 correction: correctionLabel,
             });
         });
@@ -99,6 +99,10 @@ export class Quiz {
         this.quizData.forEach((currentQuestion, index) => {
             const answer = quizElements.document.querySelector(`input[name="answer${index}"]:checked`);
             let questionBlocks = quizElements.questionBlocks[index];
+
+            questionBlocks.answerA.disabled = true;
+            questionBlocks.answerB.disabled = true;
+            questionBlocks.answerC.disabled = true;
             // If an answer has been selected.
             if (answer) {
                 if(answer.value === currentQuestion.correct) {

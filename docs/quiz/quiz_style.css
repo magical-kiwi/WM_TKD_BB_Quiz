@@ -19,6 +19,7 @@ body {
 }
 
 button {
+    font-size: 1.2em;
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -66,4 +67,13 @@ a {
 
 a:hover {
     background-color: #0056b3;
+}
+
+label {
+    font-size: 1.2em; /* Scales the quesionText */
+}
+
+.quiz-container input[type="radio"] {
+    transform: scale(1.2); /* Scales the button */
+    margin-right: 10px; /* Add spacing between button and text */
 }
